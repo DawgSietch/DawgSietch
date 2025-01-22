@@ -1,4 +1,4 @@
-- 👋 Hi, I’m @DawgSietch
+- 👋 Hi, I’m @DawgSietch, the Sietch for Dawgs
 - 👀 I’m interested in learning python, data analysis and data visualisation
 - ⚡ Fun fact: Big beats are the best
 
