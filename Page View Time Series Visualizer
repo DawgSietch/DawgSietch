@@ -1,0 +1,48 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the CSV file
+df = pd.read_csv('fcc-forum-pageviews.csv', index_col='date', parse_dates=True)
+
+# Clean the data: remove the top and bottom 2.5%
+lower_bound = df['value'].quantile(0.025)
+upper_bound = df['value'].quantile(0.975)
+df = df[(df['value'] >= lower_bound) & (df['value'] <= upper_bound)]
+
+def draw_line_plot():
+    fig, ax = plt.subplots(figsize=(15, 5))
+    ax.plot(df.index, df['value'], color='red', linewidth=1)
+    ax.set_title("Daily freeCodeCamp Forum Page Views 5/2016-12/2019")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Page Views")
+
+    # Save image
+    fig.savefig('line_plot.png')
+    return fig
+
+def draw_bar_plot():
+    # Prepare data
+    df_bar = df.copy()
+    df_bar['year'] = df_bar.index.year
+    df_bar['month'] = df_bar.index.month_name()
+
+    # Group and pivot
+    df_grouped = df_bar.groupby(['year', 'month'])['value'].mean().unstack()
+
+    # Plot
+    fig = df_grouped.plot(kind='bar', figsize=(12, 8)).figure
+    plt.xlabel("Years")
+    plt.ylabel("Average Page Views")
+    plt.legend(title="Months")
+    plt.tight_layout()
+
+    # Save image
+    fig.savefig('bar_plot.png')
+    return fig
+
+import time_series_visualizer
+
+time_series_visualizer.draw_line_plot()
+time_series_visualizer.draw_bar_plot()
+time_series_visualizer.draw_box_plot()
